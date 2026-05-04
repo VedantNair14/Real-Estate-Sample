@@ -7,6 +7,7 @@ import { Bed, Bath, Square, Heart, MapPin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 import Link from "next/link";
+import { useEstateStore } from "@/store/useEstateStore";
 
 interface PropertyProps {
   id: string | number;
@@ -23,6 +24,29 @@ interface PropertyProps {
 }
 
 const PropertyCard = ({ property }: { property: PropertyProps }) => {
+  const { isFavorite, addFavorite, removeFavorite } = useEstateStore();
+  const favorite = isFavorite(property.id.toString());
+
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (favorite) {
+      removeFavorite(property.id.toString());
+    } else {
+      addFavorite({
+        id: property.id.toString(),
+        title: property.title,
+        price: property.price.toString(),
+        location: property.location,
+        beds: property.beds,
+        baths: property.baths,
+        sqft: property.sqft,
+        image: property.main_image || property.image || "",
+        category: property.category || property.property_type || "Luxury",
+      });
+    }
+  };
+
   const displayImage = property.main_image || property.image || "https://images.unsplash.com/photo-1600585154340-be6199f7e009?q=80&w=2070&auto=format&fit=crop";
   const displayPrice = typeof property.price === "number" 
     ? `$${property.price.toLocaleString()}` 
@@ -55,8 +79,13 @@ const PropertyCard = ({ property }: { property: PropertyProps }) => {
         </div>
 
         {/* Favorite Button */}
-        <button className="absolute top-4 right-4 p-2.5 rounded-full glass text-white hover:bg-gold transition-colors">
-          <Heart className="w-4 h-4" />
+        <button 
+          onClick={handleFavoriteClick}
+          className={`absolute top-4 right-4 p-2.5 rounded-full glass transition-colors z-20 ${
+            favorite ? "bg-gold text-white" : "text-white hover:bg-gold"
+          }`}
+        >
+          <Heart className={`w-4 h-4 ${favorite ? "fill-current" : ""}`} />
         </button>
 
         {/* Price Tag (Floating) */}

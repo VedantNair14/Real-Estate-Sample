@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,6 +18,11 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleSignIn = () => {
+    setIsLoggedIn(true);
+    alert("Signed in successfully as Julian Sterling (Premium Member)");
+  };
 
   return (
     <nav
@@ -49,18 +55,29 @@ const Navbar = () => {
 
         {/* Desktop Actions */}
         <div className="hidden md:flex items-center space-x-6">
-          <button className={`p-2 rounded-full transition-colors ${isScrolled ? "text-luxury-black hover:bg-black/5" : "text-white hover:bg-white/10"}`}>
+          <Link href="/search" className={`p-2 rounded-full transition-colors ${isScrolled ? "text-luxury-black hover:bg-black/5" : "text-white hover:bg-white/10"}`}>
             <Search className="w-5 h-5" />
-          </button>
-          <button className={`p-2 rounded-full transition-colors ${isScrolled ? "text-luxury-black hover:bg-black/5" : "text-white hover:bg-white/10"}`}>
+          </Link>
+          <Link href="/dashboard" className={`p-2 rounded-full transition-colors ${isScrolled ? "text-luxury-black hover:bg-black/5" : "text-white hover:bg-white/10"}`}>
             <Heart className="w-5 h-5" />
-          </button>
-          <Button
-            variant={isScrolled ? "default" : "outline"}
-            className={!isScrolled ? "text-white border-white hover:bg-white hover:text-luxury-black" : ""}
-          >
-            Sign In
-          </Button>
+          </Link>
+          
+          {isLoggedIn ? (
+            <Link href="/dashboard">
+              <div className={`flex items-center gap-2 p-1.5 rounded-full border transition-all ${isScrolled ? "border-gray-200 bg-white" : "border-white/20 bg-white/10"}`}>
+                <div className="w-8 h-8 rounded-full bg-gold flex items-center justify-center text-white font-bold text-xs">JS</div>
+                <span className={`text-xs font-bold pr-2 ${isScrolled ? "text-luxury-black" : "text-white"}`}>Julian</span>
+              </div>
+            </Link>
+          ) : (
+            <Button
+              variant={isScrolled ? "default" : "outline"}
+              onClick={handleSignIn}
+              className={!isScrolled ? "text-white border-white hover:bg-white hover:text-luxury-black" : ""}
+            >
+              Sign In
+            </Button>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -96,7 +113,13 @@ const Navbar = () => {
               </Link>
             ))}
             <div className="flex items-center space-x-4 pt-4">
-              <Button className="flex-1">Sign In</Button>
+              {isLoggedIn ? (
+                <Link href="/dashboard" className="flex-1" onClick={() => setMobileMenuOpen(false)}>
+                  <Button className="w-full">Go to Dashboard</Button>
+                </Link>
+              ) : (
+                <Button className="flex-1" onClick={handleSignIn}>Sign In</Button>
+              )}
             </div>
           </motion.div>
         )}

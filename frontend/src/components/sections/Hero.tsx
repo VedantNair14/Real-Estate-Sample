@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Search, MapPin, Home, DollarSign, ArrowDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const heroImages = [
   "https://images.unsplash.com/photo-1600585154340-be6199f7e009?q=80&w=2070&auto=format&fit=crop",
@@ -14,6 +15,22 @@ const heroImages = [
 
 const Hero = () => {
   const [currentImage, setCurrentImage] = useState(0);
+  const router = useRouter();
+  
+  const [searchParams, setSearchParams] = useState({
+    location: "",
+    type: "Penthouse",
+    price: "$1M - $5M"
+  });
+
+  const handleSearch = () => {
+    const query = new URLSearchParams({
+      location: searchParams.location,
+      type: searchParams.type,
+      price: searchParams.price
+    }).toString();
+    router.push(`/search?${query}`);
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -91,6 +108,8 @@ const Hero = () => {
                   <input 
                     type="text" 
                     placeholder="Where to?" 
+                    value={searchParams.location}
+                    onChange={(e) => setSearchParams({ ...searchParams, location: e.target.value })}
                     className="w-full bg-transparent border-none focus:ring-0 text-luxury-black font-medium placeholder:text-gray-400 p-0 text-sm outline-none"
                   />
                 </div>
@@ -100,7 +119,11 @@ const Hero = () => {
                 <Home className="w-5 h-5 text-gold mr-3 shrink-0" />
                 <div className="text-left">
                   <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Property Type</p>
-                  <select className="w-full bg-transparent border-none focus:ring-0 text-luxury-black font-medium p-0 text-sm appearance-none outline-none">
+                  <select 
+                    value={searchParams.type}
+                    onChange={(e) => setSearchParams({ ...searchParams, type: e.target.value })}
+                    className="w-full bg-transparent border-none focus:ring-0 text-luxury-black font-medium p-0 text-sm appearance-none outline-none"
+                  >
                     <option>Penthouse</option>
                     <option>Villa</option>
                     <option>Mansion</option>
@@ -113,7 +136,11 @@ const Hero = () => {
                 <DollarSign className="w-5 h-5 text-gold mr-3 shrink-0" />
                 <div className="text-left">
                   <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Price Range</p>
-                  <select className="w-full bg-transparent border-none focus:ring-0 text-luxury-black font-medium p-0 text-sm appearance-none outline-none">
+                  <select 
+                    value={searchParams.price}
+                    onChange={(e) => setSearchParams({ ...searchParams, price: e.target.value })}
+                    className="w-full bg-transparent border-none focus:ring-0 text-luxury-black font-medium p-0 text-sm appearance-none outline-none"
+                  >
                     <option>$1M - $5M</option>
                     <option>$5M - $10M</option>
                     <option>$10M+</option>
@@ -122,7 +149,10 @@ const Hero = () => {
               </div>
             </div>
             
-            <Button className="w-full md:w-auto h-12 md:h-14 px-8 rounded-xl bg-luxury-black hover:bg-gold transition-all duration-300 group shrink-0">
+            <Button 
+              onClick={handleSearch}
+              className="w-full md:w-auto h-12 md:h-14 px-8 rounded-xl bg-luxury-black hover:bg-gold transition-all duration-300 group shrink-0"
+            >
               <Search className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
               <span className="font-semibold">Search</span>
             </Button>
