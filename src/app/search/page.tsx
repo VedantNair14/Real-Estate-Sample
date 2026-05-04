@@ -74,12 +74,14 @@ const SearchContent = () => {
           
           <div className="flex items-center gap-3 w-full md:w-auto">
             <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="outline" className="h-14 px-6 rounded-2xl gap-2 border-gray-200">
-                  <SlidersHorizontal className="w-4 h-4" />
-                  Filters
-                </Button>
-              </SheetTrigger>
+              <SheetTrigger 
+                render={
+                  <Button variant="outline" className="h-14 px-6 rounded-2xl gap-2 border-gray-200">
+                    <SlidersHorizontal className="w-4 h-4" />
+                    Filters
+                  </Button>
+                }
+              />
               <SheetContent>
                 <div className="py-8">
                   <h3 className="text-2xl font-bold mb-6">Advanced Filters</h3>

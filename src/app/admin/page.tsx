@@ -123,12 +123,14 @@ const AdminPage = () => {
             </div>
             
             <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-              <DialogTrigger asChild>
-                <Button className="bg-gold hover:bg-luxury-black h-12 rounded-xl px-6 gap-2">
-                  <Plus className="w-4 h-4" />
-                  Add New Property
-                </Button>
-              </DialogTrigger>
+              <DialogTrigger 
+                render={
+                  <Button className="bg-gold hover:bg-luxury-black h-12 rounded-xl px-6 gap-2">
+                    <Plus className="w-4 h-4" />
+                    Add New Property
+                  </Button>
+                }
+              />
               <DialogContent className="sm:max-w-[500px]">
                 <DialogHeader>
                   <DialogTitle>Add New Property</DialogTitle>
@@ -318,11 +320,14 @@ const AdminPage = () => {
                               >
                                 <Trash2 className="w-3 h-3" /> Delete
                               </DropdownMenuItem>
-                              <DropdownMenuItem className="gap-2" asChild>
-                                <Link href={`/property/${property.id}`} className="flex items-center gap-2">
-                                  <ExternalLink className="w-3 h-3" /> View Site
-                                </Link>
-                              </DropdownMenuItem>
+                              <DropdownMenuItem 
+                                className="gap-2" 
+                                render={
+                                  <Link href={`/property/${property.id}`} className="flex items-center gap-2">
+                                    <ExternalLink className="w-3 h-3" /> View Site
+                                  </Link>
+                                }
+                              />
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </td>
