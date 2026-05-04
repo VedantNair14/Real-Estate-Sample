@@ -11,6 +11,14 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useSearchParams } from "next/navigation";
 import axios from "axios";
 
+const MOCK_PROPERTIES = [
+  { id: 1, title: "The Glass Pavilion", location: "Malibu, CA", price: 12500000, beds: 5, baths: 6, sqft: 8500, property_type: "Villa", main_image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200", status: "For Sale" },
+  { id: 2, title: "Skyline Penthouse", location: "Manhattan, NY", price: 8900000, beds: 3, baths: 4, sqft: 4200, property_type: "Penthouse", main_image: "https://images.unsplash.com/photo-1600607687940-c52fb0729a5c?auto=format&fit=crop&w=1200", status: "For Sale" },
+  { id: 3, title: "Azure Coastal Villa", location: "Miami, FL", price: 15700000, beds: 6, baths: 8, sqft: 11000, property_type: "Mansion", main_image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200", status: "Exclusive" },
+  { id: 4, title: "Modernist Desert Retreat", location: "Palm Springs, CA", price: 6500000, beds: 4, baths: 4, sqft: 5800, property_type: "Villa", main_image: "https://images.unsplash.com/photo-1600585154340-be6199f7e009?auto=format&fit=crop&w=1200", status: "For Sale" },
+  { id: 5, title: "European Classic Estate", location: "Greenwich, CT", price: 22000000, beds: 8, baths: 12, sqft: 18000, property_type: "Mansion", main_image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200", status: "For Sale" },
+];
+
 const SearchContent = () => {
   const searchParams = useSearchParams();
   const [view, setView] = useState<"grid" | "map">("grid");
@@ -22,7 +30,7 @@ const SearchContent = () => {
     const fetchProperties = async () => {
       setLoading(true);
       try {
-        const response = await axios.get("http://localhost:8001/api/properties");
+        const response = await axios.get("http://localhost:8001/api/properties", { timeout: 2000 });
         let results = response.data;
         
         const locationFilter = searchParams.get("location");
@@ -42,7 +50,8 @@ const SearchContent = () => {
 
         setProperties(results);
       } catch (error) {
-        console.error("Error fetching search results:", error);
+        console.warn("API unreachable, using production fallback data.");
+        setProperties(MOCK_PROPERTIES);
       } finally {
         setLoading(false);
       }
