@@ -96,8 +96,8 @@ estate-platform/
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/VedantNair14/Sample-Website-Real-Estate.git
-cd Sample-Website-Real-Estate
+git clone https://github.com/VedantNair14/Real-Estate-Sample.git
+cd Real-Estate-Sample
 ```
 
 ### 2. Backend Setup
