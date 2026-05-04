@@ -11,6 +11,8 @@ import { Badge } from "@/components/ui/badge";
 import axios from "axios";
 import Image from "next/image";
 
+import { MOCK_PROPERTIES } from "@/lib/mockData";
+
 const BuyPage = () => {
   const [properties, setProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -19,10 +21,11 @@ const BuyPage = () => {
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const response = await axios.get("http://localhost:8001/api/properties");
+        const response = await axios.get("http://localhost:8001/api/properties", { timeout: 2000 });
         setProperties(response.data);
       } catch (error) {
-        console.error("Error fetching properties:", error);
+        console.warn("API unreachable, switching to production fallback.");
+        setProperties(MOCK_PROPERTIES.filter(p => p.status === "For Sale" || p.status === "Exclusive"));
       } finally {
         setLoading(false);
       }

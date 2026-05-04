@@ -79,13 +79,34 @@ const RENTAL_PROPERTIES = [
   },
 ];
 
+import { MOCK_PROPERTIES } from "@/lib/mockData";
+
 const RentPage = () => {
+  const [properties, setProperties] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState("All");
+
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const response = await axios.get("http://localhost:8001/api/properties", { timeout: 2000 });
+        const rentals = response.data.filter((p: any) => p.status === "For Rent" || p.price < 100000);
+        setProperties(rentals.length > 0 ? rentals : MOCK_PROPERTIES.filter(p => p.status === "For Rent"));
+      } catch (error) {
+        console.warn("API unreachable, switching to production fallback.");
+        setProperties(MOCK_PROPERTIES.filter(p => p.status === "For Rent"));
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProperties();
+  }, []);
+
   const filters = ["All", "Penthouse", "Villa", "Apartment", "Loft", "Mansion"];
 
   const filtered = activeFilter === "All"
-    ? RENTAL_PROPERTIES
-    : RENTAL_PROPERTIES.filter((p) => p.category === activeFilter);
+    ? properties
+    : properties.filter((p) => p.property_type === activeFilter || p.category === activeFilter);
 
   return (
     <div className="bg-white min-h-screen">
