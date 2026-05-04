@@ -54,9 +54,10 @@ const EditorialShowcase = () => (
           className="relative rounded-3xl overflow-hidden group"
         >
           <Image
-            src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053&auto=format&fit=crop"
+            src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200"
             alt="Luxury Architecture"
             fill
+            unoptimized={true}
             className="object-cover transition-transform duration-[1.2s] group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
@@ -123,10 +124,10 @@ const EditorialShowcase = () => (
 /* ─────────────── LUXURY DESTINATIONS ─────────────── */
 const LuxuryDestinations = () => {
   const destinations = [
-    { city: "Malibu", country: "California", image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070&auto=format&fit=crop", listings: "42" },
-    { city: "Beverly Hills", country: "California", image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=2071&auto=format&fit=crop", listings: "38" },
-    { city: "Manhattan", country: "New York", image: "https://images.unsplash.com/photo-1600607687940-c52fb0729a5c?q=80&w=2070&auto=format&fit=crop", listings: "67" },
-    { city: "Miami Beach", country: "Florida", image: "https://images.unsplash.com/photo-1600585154526-990dcea4db0d?q=80&w=2187&auto=format&fit=crop", listings: "29" },
+    { city: "Malibu", country: "California", image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800", listings: "42" },
+    { city: "Beverly Hills", country: "California", image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=800", listings: "38" },
+    { city: "Manhattan", country: "New York", image: "https://images.unsplash.com/photo-1600607687940-c52fb0729a5c?auto=format&fit=crop&w=800", listings: "67" },
+    { city: "Miami Beach", country: "Florida", image: "https://images.unsplash.com/photo-1600585154526-990dcea4db0d?auto=format&fit=crop&w=800", listings: "29" },
   ];
 
   return (
@@ -161,6 +162,7 @@ const LuxuryDestinations = () => {
                 src={dest.image}
                 alt={dest.city}
                 fill
+                unoptimized={true}
                 className="object-cover transition-transform duration-700 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />

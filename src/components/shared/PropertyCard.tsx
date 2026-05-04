@@ -47,7 +47,7 @@ const PropertyCard = ({ property }: { property: PropertyProps }) => {
     }
   };
 
-  const displayImage = property.main_image || property.image || "https://images.unsplash.com/photo-1600585154340-be6199f7e009?q=80&w=2070&auto=format&fit=crop";
+  const displayImage = property.main_image || property.image || "https://images.unsplash.com/photo-1600585154340-be6199f7e009?auto=format&fit=crop&w=800";
   const displayPrice = typeof property.price === "number" 
     ? `$${property.price.toLocaleString()}` 
     : property.price;
@@ -66,6 +66,7 @@ const PropertyCard = ({ property }: { property: PropertyProps }) => {
           src={displayImage}
           alt={property.title}
           fill
+          unoptimized={true}
           className="object-cover transition-transform duration-700 group-hover:scale-110"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
