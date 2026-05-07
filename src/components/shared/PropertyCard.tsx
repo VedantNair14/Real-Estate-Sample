@@ -3,9 +3,8 @@
 import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Bed, Bath, Square, Heart, MapPin } from "lucide-react";
+import { Bed, Bath, Square, Heart, MapPin, ChevronRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-
 import Link from "next/link";
 import { useEstateStore } from "@/store/useEstateStore";
 
@@ -49,84 +48,86 @@ const PropertyCard = ({ property }: { property: PropertyProps }) => {
 
   const displayImage = property.main_image || property.image || "https://images.unsplash.com/photo-1600585154340-be6199f7e009?auto=format&fit=crop&w=800";
   const displayPrice = typeof property.price === "number" 
-    ? `$${property.price.toLocaleString()}` 
+    ? `$${(property.price / 1000000).toFixed(1)}M` 
     : property.price;
   const displayCategory = property.category || property.property_type || "Luxury";
 
   return (
-    <Link href={`/property/${property.id}`} className="block">
+    <Link href={`/property/${property.id}`} className="block group">
       <motion.div
-        whileHover={{ y: -10 }}
-        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        className="group relative bg-white rounded-3xl overflow-hidden border border-gray-100 hover:shadow-2xl transition-all duration-500"
+        className="relative bg-luxury-dark rounded-[2.5rem] overflow-hidden border border-white/5 hover:border-gold/20 transition-all duration-700"
       >
-      {/* Image Section */}
-      <div className="relative aspect-[4/5] overflow-hidden">
-        <Image
-          src={displayImage}
-          alt={property.title}
-          fill
-          unoptimized={true}
-          className="object-cover transition-transform duration-700 group-hover:scale-110"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        
-        {/* Badges */}
-        <div className="absolute top-4 left-4 flex flex-col gap-2">
-          <Badge className="bg-white/90 text-luxury-black border-none hover:bg-white">{displayCategory}</Badge>
-          {(displayCategory === "Exclusive" || displayCategory === "Penthouse") && (
-            <Badge className="bg-gold text-white border-none">Top Rated</Badge>
-          )}
-        </div>
+        {/* Image Container */}
+        <div className="relative aspect-[4/5] overflow-hidden">
+          <Image
+            src={displayImage}
+            alt={property.title}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110"
+            priority={false}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-luxury-black via-luxury-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-700" />
+          
+          {/* Top Actions */}
+          <div className="absolute top-6 left-6 right-6 flex justify-between items-start">
+            <Badge className="bg-white/10 backdrop-blur-md text-white border-white/10 px-4 py-1.5 rounded-full text-[10px] uppercase tracking-widest font-bold">
+              {displayCategory}
+            </Badge>
+            <button 
+              onClick={handleFavoriteClick}
+              className={`p-3 rounded-full glass transition-all duration-500 hover:scale-110 ${
+                favorite ? "bg-gold text-white" : "bg-black/20 text-white hover:bg-gold/80"
+              }`}
+            >
+              <Heart className={`w-4 h-4 ${favorite ? "fill-current" : ""}`} />
+            </button>
+          </div>
 
-        {/* Favorite Button */}
-        <button 
-          onClick={handleFavoriteClick}
-          className={`absolute top-4 right-4 p-2.5 rounded-full glass transition-colors z-20 ${
-            favorite ? "bg-gold text-white" : "text-white hover:bg-gold"
-          }`}
-        >
-          <Heart className={`w-4 h-4 ${favorite ? "fill-current" : ""}`} />
-        </button>
-
-        {/* Price Tag (Floating) */}
-        <div className="absolute bottom-6 left-6 text-white translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-          <p className="text-3xl font-bold tracking-tight">{displayPrice}</p>
-        </div>
-      </div>
-
-      {/* Content Section */}
-      <div className="p-6">
-        <div className="flex items-start justify-between mb-4">
-          <div>
-            <div className="flex items-center text-muted-foreground text-xs uppercase tracking-widest mb-1 font-semibold">
-              <MapPin className="w-3 h-3 mr-1" />
-              {property.location}
-            </div>
-            <h3 className="text-xl font-bold text-luxury-black group-hover:text-gold transition-colors">
-              {property.title}
-            </h3>
+          {/* Price Overlay */}
+          <div className="absolute bottom-8 left-8 right-8">
+            <motion.div 
+              initial={{ y: 20, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              className="flex items-end justify-between"
+            >
+              <div>
+                <span className="text-[10px] uppercase font-bold text-gold tracking-[0.3em] mb-1 block">Asking Price</span>
+                <p className="text-4xl font-bold text-white tracking-tighter">{displayPrice}</p>
+              </div>
+              <div className="w-12 h-12 rounded-full glass flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 translate-x-4 group-hover:translate-x-0">
+                <ChevronRight className="w-5 h-5 text-white" />
+              </div>
+            </motion.div>
           </div>
         </div>
 
-        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-          <div className="flex items-center gap-4 text-sm text-gray-500">
-            <div className="flex items-center gap-1.5">
-              <Bed className="w-4 h-4 text-gold" />
-              <span>{property.beds}</span>
+        {/* Content */}
+        <div className="p-8">
+          <div className="flex items-center gap-2 mb-3">
+            <MapPin className="w-3 h-3 text-gold" />
+            <span className="text-[10px] uppercase tracking-widest text-white/40 font-bold">{property.location}</span>
+          </div>
+          <h3 className="text-2xl font-bold text-white mb-6 group-hover:text-gold transition-colors duration-500">
+            {property.title}
+          </h3>
+
+          <div className="flex items-center gap-6 pt-6 border-t border-white/5">
+            <div className="flex items-center gap-2">
+              <Bed className="w-4 h-4 text-white/20" />
+              <span className="text-sm font-medium text-white/60">{property.beds} <span className="text-[10px] opacity-40 uppercase ml-1">Beds</span></span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <Bath className="w-4 h-4 text-gold" />
-              <span>{property.baths}</span>
+            <div className="flex items-center gap-2">
+              <Bath className="w-4 h-4 text-white/20" />
+              <span className="text-sm font-medium text-white/60">{property.baths} <span className="text-[10px] opacity-40 uppercase ml-1">Baths</span></span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <Square className="w-4 h-4 text-gold" />
-              <span>{property.sqft} <span className="text-[10px]">sqft</span></span>
+            <div className="flex items-center gap-2">
+              <Square className="w-4 h-4 text-white/20" />
+              <span className="text-sm font-medium text-white/60">{(property.sqft / 1000).toFixed(1)}k <span className="text-[10px] opacity-40 uppercase ml-1">Sqft</span></span>
             </div>
           </div>
         </div>
-      </div>
-    </motion.div>
+      </motion.div>
     </Link>
   );
 };

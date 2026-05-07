@@ -4,34 +4,38 @@ import React from "react";
 import Navbar from "@/components/layout/Navbar";
 import Hero from "@/components/sections/Hero";
 import FeaturedListings from "@/components/sections/FeaturedListings";
+import MarketIntelligence from "@/components/sections/MarketIntelligence";
+import LuxuryEditorial from "@/components/sections/LuxuryEditorial";
 import { motion } from "framer-motion";
-import { ArrowRight, Star, Quote, Building2, Users, Globe, Award, Play, ChevronRight, MapPin, Phone, Mail } from "lucide-react";
+import { ArrowRight, Star, Quote, Building2, Users, Globe, Award, Play, ChevronRight, MapPin, Phone, Mail, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
+import Magnetic from "@/components/shared/Magnetic";
+import ConciergeInquiry from "@/components/shared/ConciergeInquiry";
 
 /* ─────────────── STATS MARQUEE ─────────────── */
 const StatsMarquee = () => (
-  <section className="py-6 bg-luxury-black overflow-hidden">
+  <section className="py-12 bg-luxury-dark border-y border-white/5 overflow-hidden">
     <motion.div
       animate={{ x: ["0%", "-50%"] }}
-      transition={{ duration: 25, ease: "linear", repeat: Infinity }}
-      className="flex gap-16 whitespace-nowrap"
+      transition={{ duration: 40, ease: "linear", repeat: Infinity }}
+      className="flex gap-24 whitespace-nowrap"
     >
       {[...Array(2)].map((_, i) => (
-        <div key={i} className="flex gap-16 items-center min-w-max">
+        <div key={i} className="flex gap-24 items-center min-w-max">
           {[
-            { num: "2,500+", label: "Properties Sold" },
-            { num: "$12B+", label: "Transaction Volume" },
-            { num: "98%", label: "Client Satisfaction" },
-            { num: "35+", label: "Global Markets" },
-            { num: "150+", label: "Elite Advisors" },
-            { num: "15yr", label: "Industry Excellence" },
+            { num: "2.5k+", label: "Properties Curated" },
+            { num: "$12B+", label: "Portfolio Value" },
+            { num: "99%", label: "Client Retention" },
+            { num: "45+", label: "Elite Markets" },
+            { num: "180+", label: "Global Partners" },
+            { num: "25yr", label: "Heritage" },
           ].map((stat, j) => (
-            <div key={j} className="flex items-center gap-4">
-              <span className="text-2xl font-bold text-gold tracking-tight">{stat.num}</span>
-              <span className="text-xs uppercase tracking-[0.2em] text-white/50 font-medium">{stat.label}</span>
-              <span className="text-white/10 mx-2">◆</span>
+            <div key={j} className="flex items-center gap-6">
+              <span className="text-3xl font-bold text-white tracking-tighter">{stat.num}</span>
+              <span className="text-[10px] uppercase tracking-[0.4em] text-white/30 font-bold">{stat.label}</span>
+              <div className="w-1.5 h-1.5 rounded-full bg-gold/30 mx-4" />
             </div>
           ))}
         </div>
@@ -42,80 +46,90 @@ const StatsMarquee = () => (
 
 /* ─────────────── EDITORIAL SHOWCASE ─────────────── */
 const EditorialShowcase = () => (
-  <section className="py-28 bg-[#faf9f6] relative overflow-hidden">
+  <section className="py-32 bg-luxury-black relative overflow-hidden">
     <div className="container px-6 mx-auto">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch min-h-[700px]">
-        {/* Left: Image */}
-        <motion.div
-          initial={{ opacity: 0, x: -40 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="relative rounded-3xl overflow-hidden group"
-        >
-          <Image
-            src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200"
-            alt="Luxury Architecture"
-            fill
-            unoptimized={true}
-            className="object-cover transition-transform duration-[1.2s] group-hover:scale-105"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-          <div className="absolute bottom-8 left-8 right-8">
-            <div className="glass rounded-2xl p-6 backdrop-blur-lg">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-gold rounded-full flex items-center justify-center">
-                  <Play className="w-5 h-5 text-white fill-white ml-0.5" />
-                </div>
-                <div>
-                  <p className="text-white font-bold">Take a Virtual Tour</p>
-                  <p className="text-white/60 text-sm">Experience luxury from anywhere</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+        {/* Left: Asymmetrical Image Grid */}
+        <div className="lg:col-span-7 grid grid-cols-12 gap-6 relative">
+           <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+            className="col-span-8 aspect-[4/5] rounded-[3rem] overflow-hidden relative z-10"
+          >
+            <Image
+              src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200"
+              alt="Luxury Architecture"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover transition-transform duration-[2s] hover:scale-105"
+            />
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.5, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="col-span-6 absolute -bottom-12 -right-6 aspect-square w-[70%] rounded-[3rem] overflow-hidden border-8 border-luxury-black z-20 hidden md:block"
+          >
+            <Image
+              src="https://images.unsplash.com/photo-1600566753190-17f0bb2a6c3e?auto=format&fit=crop&w=800"
+              alt="Luxury Interior"
+              fill
+              sizes="30vw"
+              className="object-cover"
+            />
+          </motion.div>
+        </div>
 
         {/* Right: Content */}
-        <motion.div
-          initial={{ opacity: 0, x: 40 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col justify-center lg:pl-20 py-16 lg:py-0"
-        >
-          <span className="text-gold font-bold uppercase tracking-[0.2em] text-xs mb-6 block">
-            Editorial Living
-          </span>
-          <h2 className="editorial-heading text-4xl md:text-6xl text-luxury-black mb-8 leading-tight">
-            Where <span className="italic">Architecture</span>
-            <br />Meets Artistry
-          </h2>
-          <p className="text-gray-500 text-lg leading-relaxed mb-10 max-w-md">
-            Every estate in our collection is handpicked for its architectural merit, cultural significance, and investment potential. We don&apos;t just sell properties — we curate legacies.
-          </p>
+        <div className="lg:col-span-5 lg:pl-12">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            <div className="flex items-center gap-3 mb-8">
+              <span className="w-10 h-[1px] bg-gold" />
+              <span className="text-gold font-bold uppercase tracking-[0.4em] text-[10px]">
+                The Editorial Philosophy
+              </span>
+            </div>
+            <h2 className="editorial-heading text-5xl md:text-7xl text-white mb-8">
+              Where <span className="italic text-gold">Architecture</span> <br /> 
+              Meets Artistry
+            </h2>
+            <p className="text-white/40 text-lg font-light leading-relaxed mb-12">
+              We don&apos;t just sell properties; we curate legacies. Every estate in our collection is handpicked for its architectural merit and cultural significance.
+            </p>
 
-          <div className="grid grid-cols-2 gap-8 mb-12">
-            {[
-              { icon: Building2, label: "Architectural Masterpieces" },
-              { icon: Globe, label: "Global Portfolio" },
-              { icon: Award, label: "Award-Winning Team" },
-              { icon: Users, label: "White-Glove Service" },
-            ].map(({ icon: Icon, label }) => (
-              <div key={label} className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center">
-                  <Icon className="w-5 h-5 text-gold" />
+            <div className="grid grid-cols-1 gap-6 mb-12">
+              {[
+                { icon: Award, label: "Heritage Preservation", desc: "Protecting architectural history." },
+                { icon: Globe, label: "Global Reach", desc: "Exclusive access to private off-market listings." },
+              ].map(({ icon: Icon, label, desc }) => (
+                <div key={label} className="flex items-start gap-4 p-6 rounded-[2rem] bg-white/5 border border-white/5 hover:border-gold/20 transition-all duration-500">
+                  <div className="w-12 h-12 rounded-2xl bg-gold/10 flex items-center justify-center shrink-0">
+                    <Icon className="w-6 h-6 text-gold" />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-bold mb-1">{label}</h4>
+                    <p className="text-white/30 text-xs font-light">{desc}</p>
+                  </div>
                 </div>
-                <span className="text-sm font-semibold text-luxury-black">{label}</span>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
 
-          <Button className="bg-luxury-black hover:bg-gold text-white h-14 px-10 rounded-full w-fit transition-all duration-300 group">
-            Explore Our Story
-            <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </Button>
-        </motion.div>
+            <Magnetic>
+              <Button className="bg-gold hover:bg-white text-black h-16 px-10 rounded-full transition-all duration-500 font-bold group">
+                Discover Our Heritage
+                <ArrowRight className="ml-3 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Magnetic>
+          </motion.div>
+        </div>
       </div>
     </div>
   </section>
@@ -124,57 +138,52 @@ const EditorialShowcase = () => (
 /* ─────────────── LUXURY DESTINATIONS ─────────────── */
 const LuxuryDestinations = () => {
   const destinations = [
-    { city: "Malibu", country: "California", image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800", listings: "42" },
-    { city: "Beverly Hills", country: "California", image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=800", listings: "38" },
-    { city: "Manhattan", country: "New York", image: "https://images.unsplash.com/photo-1600607687940-c52fb0729a5c?auto=format&fit=crop&w=800", listings: "67" },
-    { city: "Miami Beach", country: "Florida", image: "https://images.unsplash.com/photo-1600585154526-990dcea4db0d?auto=format&fit=crop&w=800", listings: "29" },
+    { city: "Monaco", country: "French Riviera", image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800", price: "Avg $25M" },
+    { city: "Dubai", country: "UAE", image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=800", price: "Avg $18M" },
+    { city: "Hamptons", country: "New York", image: "https://images.unsplash.com/photo-1600607687940-c52fb0729a5c?auto=format&fit=crop&w=800", price: "Avg $15M" },
+    { city: "Malibu", country: "California", image: "https://images.unsplash.com/photo-1600585154526-990dcea4db0d?auto=format&fit=crop&w=800", price: "Avg $22M" },
   ];
 
   return (
-    <section className="py-28 bg-white">
-      <div className="container px-6 mx-auto">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16">
+    <section className="py-32 bg-luxury-dark relative overflow-hidden">
+       <div className="container px-6 mx-auto">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-20">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <span className="text-gold font-bold uppercase tracking-[0.2em] text-xs mb-4 block">
-              Premium Locations
-            </span>
-            <h2 className="editorial-heading text-4xl md:text-6xl text-luxury-black">
-              Luxury <span className="italic">Destinations</span>
+            <span className="text-gold font-bold uppercase tracking-[0.4em] text-[10px] mb-4 block">Global Footprint</span>
+            <h2 className="editorial-heading text-5xl md:text-7xl text-white">
+              Prime <span className="italic text-gold">Destinations</span>
             </h2>
           </motion.div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {destinations.map((dest, i) => (
             <motion.div
               key={dest.city}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: i * 0.1 }}
-              className="group relative h-[450px] rounded-3xl overflow-hidden cursor-pointer"
+              transition={{ duration: 1, delay: i * 0.1 }}
+              className="group relative h-[550px] rounded-[3rem] overflow-hidden cursor-pointer"
             >
               <Image
                 src={dest.image}
                 alt={dest.city}
                 fill
-                unoptimized={true}
-                className="object-cover transition-transform duration-700 group-hover:scale-110"
+                unoptimized
+                className="object-cover transition-transform duration-[1.5s] group-hover:scale-110"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-              <div className="absolute bottom-0 left-0 right-0 p-8">
-                <div className="flex items-center gap-2 mb-2">
-                  <MapPin className="w-3.5 h-3.5 text-gold" />
-                  <span className="text-xs uppercase tracking-[0.2em] text-white/60 font-medium">{dest.country}</span>
-                </div>
-                <h3 className="text-3xl font-bold text-white mb-2 editorial-heading">{dest.city}</h3>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-white/60">{dest.listings} Exclusive Listings</span>
-                  <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center group-hover:bg-gold transition-colors duration-300">
+              <div className="absolute inset-0 bg-gradient-to-t from-luxury-black via-luxury-black/20 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-10">
+                <span className="text-[10px] uppercase tracking-[0.3em] text-gold font-bold mb-2 block">{dest.country}</span>
+                <h3 className="text-4xl font-bold text-white mb-4 tracking-tighter">{dest.city}</h3>
+                <div className="flex items-center justify-between opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
+                  <span className="text-white/60 text-xs font-medium">{dest.price}</span>
+                  <div className="w-10 h-10 rounded-full glass flex items-center justify-center">
                     <ChevronRight className="w-4 h-4 text-white" />
                   </div>
                 </div>
@@ -190,46 +199,44 @@ const LuxuryDestinations = () => {
 /* ─────────────── TESTIMONIALS ─────────────── */
 const Testimonials = () => {
   const reviews = [
-    { name: "Julian Ashford", title: "CEO, Ashford Capital", text: "The experience of finding our home with Estate was nothing short of extraordinary. Their attention to detail and curated selection made the process seamless and elevated.", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop" },
-    { name: "Victoria Chen", title: "Founder, Lumière Design", text: "Estate understood exactly what we were looking for. They didn't just show us properties — they showed us a lifestyle. Our new penthouse exceeded every expectation.", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop" },
-    { name: "Marcus Sterling", title: "Managing Partner, Sterling & Co.", text: "Working with Estate felt like having a private concierge for real estate. Their global network and market insight are genuinely world-class.", avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200&auto=format&fit=crop" },
+    { name: "Julian Ashford", title: "CEO, Global Equities", text: "Estate redefined my expectations of what a real estate partner should be. Their curation is flawless.", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop" },
+    { name: "Victoria Chen", title: "Creative Director", text: "They didn&apos;t just show me properties; they showed me a lifestyle that matched my soul.", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop" },
   ];
 
   return (
-    <section className="py-28 bg-[#faf9f6] relative overflow-hidden">
+    <section className="py-32 bg-luxury-black relative overflow-hidden">
       <div className="container px-6 mx-auto relative z-10">
-        <div className="max-w-4xl mx-auto text-center mb-16">
-          <Quote className="w-12 h-12 text-gold/20 mx-auto mb-6" />
-          <h2 className="editorial-heading text-4xl md:text-5xl text-luxury-black mb-6">
-            Trusted by the world&apos;s most <br /> <span className="italic">discerning buyers</span>
+        <div className="max-w-4xl mx-auto text-center mb-24">
+          <Quote className="w-16 h-16 text-gold/10 mx-auto mb-8" />
+          <h2 className="editorial-heading text-5xl md:text-7xl text-white">
+            Trusted by the world&apos;s <br /> <span className="italic text-gold">most discerning</span>
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto">
           {reviews.map((review, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-lg transition-shadow duration-300"
+              className="bg-white/5 p-12 rounded-[3rem] border border-white/5 relative group hover:border-gold/20 transition-all duration-700"
             >
-              <div className="flex gap-1 mb-6 text-gold">
+              <div className="flex gap-1 mb-8 text-gold">
                 {[1, 2, 3, 4, 5].map((s) => (
-                  <Star key={s} className="w-4 h-4 fill-current" />
+                  <Star key={s} className="w-3 h-3 fill-current" />
                 ))}
               </div>
-              <p className="text-gray-600 mb-8 italic leading-relaxed text-[15px]">
+              <p className="text-white/60 text-xl font-light italic leading-relaxed mb-10">
                 &ldquo;{review.text}&rdquo;
               </p>
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full overflow-hidden relative">
-                  <Image src={review.avatar} alt={review.name} fill className="object-cover" />
+              <div className="flex items-center gap-5">
+                <div className="w-16 h-16 rounded-2xl overflow-hidden relative grayscale group-hover:grayscale-0 transition-all duration-700">
+                  <Image src={review.avatar} alt={review.name} fill className="object-cover" unoptimized />
                 </div>
                 <div>
-                  <h4 className="font-bold text-luxury-black">{review.name}</h4>
-                  <p className="text-xs text-gray-400 uppercase tracking-widest font-medium">{review.title}</p>
+                  <h4 className="font-bold text-white text-lg">{review.name}</h4>
+                  <p className="text-[10px] text-gold uppercase tracking-[0.3em] font-bold">{review.title}</p>
                 </div>
               </div>
             </motion.div>
@@ -241,42 +248,44 @@ const Testimonials = () => {
 };
 
 /* ─────────────── CTA SECTION ─────────────── */
-const CTASection = () => (
-  <section className="py-0 overflow-hidden relative">
-    <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[600px]">
-      {/* Left: Image */}
-      <div className="relative h-[400px] lg:h-auto">
+const CTASection = ({ onConsultation }: { onConsultation: () => void }) => (
+  <section className="py-32 bg-luxury-black relative overflow-hidden">
+    <div className="container px-6 mx-auto">
+      <div className="relative rounded-[4rem] overflow-hidden aspect-[21/9] flex items-center justify-center text-center">
         <Image
           src="https://images.unsplash.com/photo-1600585154526-990dcea4db0d?q=80&w=2187&auto=format&fit=crop"
           alt="Luxury Interior"
           fill
-          className="object-cover"
+          unoptimized
+          className="object-cover brightness-50"
         />
-        <div className="absolute inset-0 bg-black/20" />
-      </div>
-
-      {/* Right: Content */}
-      <div className="bg-luxury-black flex items-center justify-center p-16 lg:p-24">
-        <div className="max-w-lg">
-          <span className="text-gold font-bold uppercase tracking-[0.2em] text-xs mb-6 block">
-            Start Your Journey
-          </span>
-          <h2 className="editorial-heading text-4xl md:text-6xl text-white mb-8 leading-tight">
-            Ready to find your <br /> <span className="italic text-gold">next masterpiece?</span>
-          </h2>
-          <p className="text-gray-400 text-lg mb-10 leading-relaxed">
-            Our private advisors are ready to assist you in discovering the most exclusive properties worldwide.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Button className="bg-gold hover:bg-white hover:text-luxury-black text-white h-14 px-10 rounded-full transition-all duration-300 text-base">
-              Contact an Agent
-            </Button>
-            <Link href="/search">
-              <Button variant="outline" className="border-white/20 text-white h-14 px-10 rounded-full hover:bg-white/10 transition-all duration-300 text-base w-full">
-                Browse Listings
-              </Button>
-            </Link>
-          </div>
+        <div className="relative z-10 max-w-3xl px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="editorial-heading text-6xl md:text-8xl text-white mb-10">
+              Your <span className="italic text-gold">Legacy</span> Awaits
+            </h2>
+            <div className="flex flex-col sm:flex-row gap-6 justify-center">
+              <Magnetic>
+                <Button 
+                  onClick={onConsultation}
+                  className="bg-gold hover:bg-white text-black h-16 px-12 rounded-full font-bold text-lg transition-all duration-500"
+                >
+                  Private Consultation
+                </Button>
+              </Magnetic>
+              <Magnetic>
+                <Link href="/search">
+                  <Button variant="outline" className="border-white/20 text-white hover:bg-white/10 h-16 px-12 rounded-full font-bold text-lg transition-all duration-500">
+                    Browse Portfolios
+                  </Button>
+                </Link>
+              </Magnetic>
+            </div>
+          </motion.div>
         </div>
       </div>
     </div>
@@ -285,58 +294,62 @@ const CTASection = () => (
 
 /* ─────────────── FOOTER ─────────────── */
 const Footer = () => (
-  <footer className="bg-luxury-black pt-24 pb-12 text-white">
+  <footer className="bg-luxury-black pt-32 pb-16 border-t border-white/5">
     <div className="container px-6 mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-20">
-        <div className="lg:col-span-2">
-          <span className="text-2xl font-bold tracking-tighter uppercase mb-6 block">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 mb-24">
+        <div className="lg:col-span-4">
+          <span className="text-3xl font-bold tracking-tighter uppercase mb-8 block text-white">
             Estate<span className="text-gold">.</span>
           </span>
-          <p className="text-gray-400 max-w-xs leading-relaxed mb-8">
-            Redefining luxury real estate through editorial design, technological excellence, and unparalleled service.
+          <p className="text-white/40 max-w-sm leading-relaxed mb-10 text-lg font-light">
+            Redefining ultra-luxury real estate through editorial excellence and unparalleled global intelligence.
           </p>
-          <div className="flex gap-4">
-            {["Instagram", "LinkedIn", "Twitter"].map((social) => (
-              <a key={social} href="#" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/50 hover:bg-gold hover:border-gold hover:text-white transition-all duration-300">
-                <span className="text-xs font-bold">{social[0]}</span>
+          <div className="flex gap-6">
+            {["Instagram", "LinkedIn", "X"].map((social) => (
+              <a key={social} href="#" className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/30 hover:text-gold transition-colors">
+                {social}
               </a>
             ))}
           </div>
         </div>
-        <div>
-          <h4 className="font-bold mb-6 text-sm uppercase tracking-widest text-white">Discovery</h4>
-          <ul className="space-y-4 text-gray-400 text-sm">
-            <li><a href="#" className="hover:text-gold transition-colors">New Arrivals</a></li>
-            <li><a href="#" className="hover:text-gold transition-colors">Exclusive Listings</a></li>
-            <li><a href="#" className="hover:text-gold transition-colors">Luxury Mansions</a></li>
-            <li><a href="#" className="hover:text-gold transition-colors">Virtual Tours</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 className="font-bold mb-6 text-sm uppercase tracking-widest text-white">Company</h4>
-          <ul className="space-y-4 text-gray-400 text-sm">
-            <li><a href="#" className="hover:text-gold transition-colors">Our Story</a></li>
-            <li><a href="#" className="hover:text-gold transition-colors">Private Advisors</a></li>
-            <li><a href="#" className="hover:text-gold transition-colors">Careers</a></li>
-            <li><a href="#" className="hover:text-gold transition-colors">Journal</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 className="font-bold mb-6 text-sm uppercase tracking-widest text-white">Contact</h4>
-          <ul className="space-y-4 text-gray-400 text-sm">
-            <li className="flex items-center gap-2"><Phone className="w-4 h-4 text-gold" /> +1 (310) 555-0199</li>
-            <li className="flex items-center gap-2"><Mail className="w-4 h-4 text-gold" /> concierge@estate.com</li>
-            <li className="flex items-center gap-2"><MapPin className="w-4 h-4 text-gold" /> Beverly Hills, CA</li>
-          </ul>
+        
+        <div className="lg:col-span-8 grid grid-cols-2 md:grid-cols-3 gap-12">
+          <div>
+            <h4 className="font-bold mb-8 text-[10px] uppercase tracking-[0.4em] text-gold">Curation</h4>
+            <ul className="space-y-4 text-white/40 text-sm font-medium">
+              <li><a href="#" className="hover:text-white transition-colors">The 100 Collection</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Private Islands</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Urban Penthouses</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Historic Estates</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold mb-8 text-[10px] uppercase tracking-[0.4em] text-gold">Intelligence</h4>
+            <ul className="space-y-4 text-white/40 text-sm font-medium">
+              <li><a href="#" className="hover:text-white transition-colors">Market Reports</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Investment Advisory</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Private Wealth</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Journal</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold mb-8 text-[10px] uppercase tracking-[0.4em] text-gold">Concierge</h4>
+            <ul className="space-y-4 text-white/40 text-sm font-medium">
+              <li className="flex items-center gap-3"><Phone className="w-4 h-4 text-gold/50" /> +1 (310) 555-0199</li>
+              <li className="flex items-center gap-3"><Mail className="w-4 h-4 text-gold/50" /> elite@estate.com</li>
+              <li className="flex items-center gap-3"><Globe className="w-4 h-4 text-gold/50" /> Beverly Hills, CA</li>
+            </ul>
+          </div>
         </div>
       </div>
-      <div className="flex flex-col md:flex-row items-center justify-between pt-12 border-t border-white/10 gap-6">
-        <p className="text-gray-500 text-xs tracking-widest uppercase">
-          © 2024 Estate International Realty. All rights reserved.
+      
+      <div className="flex flex-col md:flex-row items-center justify-between pt-16 border-t border-white/5 gap-8">
+        <p className="text-white/20 text-[10px] tracking-[0.4em] uppercase font-bold">
+          © 2024 Estate International Realty. Excellence in Perpetuity.
         </p>
-        <div className="flex gap-8">
-          {["Privacy Policy", "Terms of Service", "Cookie Policy"].map((link) => (
-            <a key={link} href="#" className="text-xs uppercase tracking-widest text-gray-500 hover:text-gold transition-colors">
+        <div className="flex gap-10">
+          {["Privacy", "Terms", "Legal"].map((link) => (
+            <a key={link} href="#" className="text-[10px] uppercase tracking-[0.4em] text-white/20 hover:text-gold transition-colors font-bold">
               {link}
             </a>
           ))}
@@ -348,17 +361,23 @@ const Footer = () => (
 
 /* ─────────────── HOME PAGE ─────────────── */
 export default function Home() {
+  const [isInquiryOpen, setIsInquiryOpen] = React.useState(false);
+
   return (
-    <main className="min-h-screen">
+    <main className="bg-luxury-black">
       <Navbar />
       <Hero />
       <StatsMarquee />
+      <MarketIntelligence />
       <FeaturedListings />
       <EditorialShowcase />
       <LuxuryDestinations />
       <Testimonials />
-      <CTASection />
+      <LuxuryEditorial />
+      <CTASection onConsultation={() => setIsInquiryOpen(true)} />
       <Footer />
+      <ConciergeInquiry isOpen={isInquiryOpen} onClose={() => setIsInquiryOpen(false)} />
     </main>
   );
 }
+

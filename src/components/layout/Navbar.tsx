@@ -3,8 +3,9 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, User, Heart, Menu, X } from "lucide-react";
+import { Search, User, Heart, Menu, X, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Magnetic from "../shared/Magnetic";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -15,111 +16,137 @@ const Navbar = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const handleSignIn = () => {
     setIsLoggedIn(true);
-    alert("Signed in successfully as Julian Sterling (Premium Member)");
   };
+
+  const navLinks = [
+    { name: "Portfolio", href: "/buy" },
+    { name: "Rentals", href: "/rent" },
+    { name: "Services", href: "/sell" },
+    { name: "Advisors", href: "/agents" },
+  ];
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isScrolled ? "bg-white/80 backdrop-blur-md py-4 shadow-sm" : "bg-transparent py-6"
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${
+        isScrolled ? "py-4" : "py-8"
       }`}
     >
-      <div className="container mx-auto px-6 flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="flex items-center space-x-2 group">
-          <span className={`text-2xl font-bold tracking-tighter uppercase ${isScrolled ? "text-luxury-black" : "text-white"}`}>
-            Estate<span className="text-gold">.</span>
-          </span>
-        </Link>
-
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center space-x-8">
-          {["Buy", "Rent", "Sell", "Agents"].map((item) => (
-            <Link
-              key={item}
-              href={`/${item.toLowerCase()}`}
-              className={`text-sm font-medium tracking-wide uppercase transition-colors hover:text-gold ${
-                isScrolled ? "text-luxury-black" : "text-white"
-              }`}
+      <div className="container mx-auto px-6">
+        <div className={`relative flex items-center justify-between glass px-8 py-4 rounded-full border-white/5 transition-all duration-700 ${isScrolled ? "bg-black/60 backdrop-blur-xl" : "bg-white/5 backdrop-blur-md"}`}>
+          {/* Logo */}
+          <Link href="/" className="flex items-center space-x-2 group">
+            <motion.span 
+              className="text-2xl font-bold tracking-tighter uppercase text-white"
+              whileHover={{ scale: 1.05 }}
             >
-              {item}
-            </Link>
-          ))}
-        </div>
-
-        {/* Desktop Actions */}
-        <div className="hidden md:flex items-center space-x-6">
-          <Link href="/search" className={`p-2 rounded-full transition-colors ${isScrolled ? "text-luxury-black hover:bg-black/5" : "text-white hover:bg-white/10"}`}>
-            <Search className="w-5 h-5" />
+              Estate<span className="text-gold">.</span>
+            </motion.span>
           </Link>
-          <Link href="/dashboard" className={`p-2 rounded-full transition-colors ${isScrolled ? "text-luxury-black hover:bg-black/5" : "text-white hover:bg-white/10"}`}>
-            <Heart className="w-5 h-5" />
-          </Link>
-          
-          {isLoggedIn ? (
-            <Link href="/dashboard">
-              <div className={`flex items-center gap-2 p-1.5 rounded-full border transition-all ${isScrolled ? "border-gray-200 bg-white" : "border-white/20 bg-white/10"}`}>
-                <div className="w-8 h-8 rounded-full bg-gold flex items-center justify-center text-white font-bold text-xs">JS</div>
-                <span className={`text-xs font-bold pr-2 ${isScrolled ? "text-luxury-black" : "text-white"}`}>Julian</span>
-              </div>
-            </Link>
-          ) : (
-            <Button
-              variant={isScrolled ? "default" : "outline"}
-              onClick={handleSignIn}
-              className={!isScrolled ? "text-white border-white hover:bg-white hover:text-luxury-black" : ""}
-            >
-              Sign In
-            </Button>
-          )}
-        </div>
 
-        {/* Mobile Menu Button */}
-        <button
-          className="md:hidden p-2"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        >
-          {mobileMenuOpen ? (
-            <X className={isScrolled ? "text-luxury-black" : "text-white"} />
-          ) : (
-            <Menu className={isScrolled ? "text-luxury-black" : "text-white"} />
-          )}
-        </button>
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-10">
+            {navLinks.map((link) => (
+              <Magnetic key={link.name}>
+                <Link
+                  href={link.href}
+                  className="text-[11px] font-bold tracking-[0.2em] uppercase text-white/70 hover:text-gold transition-colors duration-300"
+                >
+                  {link.name}
+                </Link>
+              </Magnetic>
+            ))}
+          </div>
+
+          {/* Desktop Actions */}
+          <div className="hidden md:flex items-center space-x-4">
+            <Magnetic>
+              <Link href="/search" className="p-2 text-white/70 hover:text-gold transition-colors">
+                <Search className="w-5 h-5" />
+              </Link>
+            </Magnetic>
+            
+            <div className="w-[1px] h-4 bg-white/10 mx-2" />
+            
+            {isLoggedIn ? (
+              <Magnetic>
+                <Link href="/dashboard">
+                  <div className="flex items-center gap-3 pl-1 pr-4 py-1 rounded-full bg-white/5 border border-white/10 hover:border-gold/50 transition-all">
+                    <div className="w-8 h-8 rounded-full bg-gold flex items-center justify-center text-black font-bold text-xs">JS</div>
+                    <span className="text-[10px] font-bold text-white uppercase tracking-widest">Julian</span>
+                  </div>
+                </Link>
+              </Magnetic>
+            ) : (
+              <Magnetic>
+                <Button
+                  variant="ghost"
+                  onClick={handleSignIn}
+                  className="text-[10px] font-bold uppercase tracking-[0.2em] text-white hover:text-gold hover:bg-transparent"
+                >
+                  Client Access
+                </Button>
+              </Magnetic>
+            )}
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden p-2 text-white"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Cinematic Mobile Menu */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="absolute top-full left-0 right-0 bg-white shadow-xl p-6 md:hidden flex flex-col space-y-4"
+            initial={{ opacity: 0, x: "100%" }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: "100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="fixed inset-0 z-40 bg-luxury-black flex flex-col md:hidden"
           >
-            {["Buy", "Rent", "Sell", "Agents"].map((item) => (
-              <Link
-                key={item}
-                href={`/${item.toLowerCase()}`}
-                className="text-lg font-medium text-luxury-black hover:text-gold border-b border-gray-100 pb-2"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {item}
-              </Link>
-            ))}
-            <div className="flex items-center space-x-4 pt-4">
-              {isLoggedIn ? (
-                <Link href="/dashboard" className="flex-1" onClick={() => setMobileMenuOpen(false)}>
-                  <Button className="w-full">Go to Dashboard</Button>
-                </Link>
-              ) : (
-                <Button className="flex-1" onClick={handleSignIn}>Sign In</Button>
-              )}
+            <div className="flex justify-between items-center p-8">
+               <span className="text-2xl font-bold tracking-tighter uppercase text-white">
+                Estate<span className="text-gold">.</span>
+              </span>
+              <button onClick={() => setMobileMenuOpen(false)} className="p-2 text-white">
+                <X className="w-8 h-8" />
+              </button>
+            </div>
+            
+            <div className="flex-1 flex flex-col justify-center px-12 space-y-8">
+              {navLinks.map((link, i) => (
+                <motion.div
+                  key={link.name}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 * i }}
+                >
+                  <Link
+                    href={link.href}
+                    className="text-5xl font-heading text-white hover:text-gold transition-colors"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {link.name}
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+
+            <div className="p-12 border-t border-white/5">
+              <Button className="w-full bg-gold text-black font-bold h-16 rounded-2xl" onClick={handleSignIn}>
+                Private Portal
+              </Button>
             </div>
           </motion.div>
         )}
@@ -129,3 +156,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+

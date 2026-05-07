@@ -3,13 +3,14 @@
 import React, { useState, useEffect, Suspense } from "react";
 import Navbar from "@/components/layout/Navbar";
 import PropertyCard from "@/components/shared/PropertyCard";
-import { motion } from "framer-motion";
-import { Search, Map as MapIcon, List, SlidersHorizontal, Loader2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Search, Map as MapIcon, List, SlidersHorizontal, Loader2, Sparkles, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { useSearchParams } from "next/navigation";
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { useSearchParams, useRouter } from "next/navigation";
 import axios from "axios";
+import Magnetic from "@/components/shared/Magnetic";
 
 const MOCK_PROPERTIES = [
   { id: 1, title: "The Glass Pavilion", location: "Malibu, CA", price: 12500000, beds: 5, baths: 6, sqft: 8500, property_type: "Villa", main_image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200", status: "For Sale" },
@@ -21,6 +22,7 @@ const MOCK_PROPERTIES = [
 
 const SearchContent = () => {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const [view, setView] = useState<"grid" | "map">("grid");
   const [properties, setProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -60,125 +62,159 @@ const SearchContent = () => {
     fetchProperties();
   }, [searchParams]);
 
+  const handleSearch = () => {
+    router.push(`/search?location=${query}`);
+  };
+
   return (
-    <div className="flex flex-col h-screen overflow-hidden">
+    <div className="flex flex-col h-screen overflow-hidden bg-luxury-black">
       <Navbar />
       
-      <div className="pt-24 pb-6 bg-white border-b border-gray-100 shrink-0">
-        <div className="container px-6 mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex-1 w-full max-w-2xl relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-            <Input 
-              placeholder="Search by city, neighborhood, or ZIP..." 
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  window.location.href = `/search?location=${query}`;
-                }
-              }}
-              className="pl-12 h-14 rounded-2xl bg-gray-50 border-none focus-visible:ring-gold/20 text-lg"
-            />
-          </div>
-          
-          <div className="flex items-center gap-3 w-full md:w-auto">
-            <Sheet>
-              <SheetTrigger 
-                render={
-                  <Button variant="outline" className="h-14 px-6 rounded-2xl gap-2 border-gray-200">
+      {/* Premium Search Header */}
+      <div className="pt-32 pb-8 shrink-0 relative z-20">
+        <div className="container px-6 mx-auto">
+          <div className="flex flex-col lg:flex-row items-end justify-between gap-10">
+            <div className="w-full max-w-3xl">
+              <div className="flex items-center gap-3 mb-6">
+                <Sparkles className="w-4 h-4 text-gold" />
+                <span className="text-gold font-bold uppercase tracking-[0.4em] text-[10px]">Curated Intelligence</span>
+              </div>
+              <div className="relative group">
+                <div className="absolute inset-0 bg-gold/10 blur-2xl group-focus-within:bg-gold/20 transition-all duration-500" />
+                <div className="relative glass rounded-[2rem] border-white/10 flex items-center px-8 h-20">
+                  <Search className="text-white/30 w-6 h-6 mr-6" />
+                  <input 
+                    placeholder="Search by city, neighborhood, or legacy..." 
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                    className="flex-1 bg-transparent border-none outline-none text-white text-xl font-light placeholder:text-white/20"
+                  />
+                  <Magnetic>
+                    <Button onClick={handleSearch} className="bg-gold hover:bg-white text-black font-bold rounded-xl px-6 h-12 ml-4">
+                      Search
+                    </Button>
+                  </Magnetic>
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-6 pb-2">
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="outline" className="h-14 px-8 rounded-2xl gap-3 border-white/10 text-white hover:bg-white/5 font-bold uppercase tracking-widest text-[10px]">
                     <SlidersHorizontal className="w-4 h-4" />
-                    Filters
+                    Refine
                   </Button>
-                }
-              />
-              <SheetContent>
-                <div className="py-8">
-                  <h3 className="text-2xl font-bold mb-6">Advanced Filters</h3>
-                  <div className="space-y-6">
+                </SheetTrigger>
+                <SheetContent className="bg-luxury-dark border-white/5 text-white">
+                  <SheetHeader>
+                    <SheetTitle className="editorial-heading text-4xl text-white mb-10">Filters</SheetTitle>
+                  </SheetHeader>
+                  <div className="space-y-12">
                     <div>
-                      <p className="text-sm font-bold mb-3 uppercase tracking-wider text-gray-400">Property Type</p>
-                      <div className="grid grid-cols-2 gap-2">
+                      <p className="text-[10px] font-bold mb-6 uppercase tracking-[0.4em] text-white/30">Property Class</p>
+                      <div className="grid grid-cols-2 gap-3">
                         {["All", "Villa", "Penthouse", "Mansion", "Apartment"].map((t) => (
-                          <button key={t} className="px-4 py-2 rounded-xl bg-gray-50 text-sm font-medium hover:bg-gold hover:text-white transition-colors">
+                          <button key={t} className="px-6 py-4 rounded-2xl bg-white/5 border border-white/5 text-[10px] font-bold uppercase tracking-widest text-white hover:border-gold/50 transition-all">
                             {t}
                           </button>
                         ))}
                       </div>
                     </div>
                   </div>
-                </div>
-              </SheetContent>
-            </Sheet>
-            
-            <div className="flex bg-gray-50 p-1.5 rounded-2xl border border-gray-100">
-              <button
-                onClick={() => setView("grid")}
-                className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${
-                  view === "grid" ? "bg-white shadow-md text-luxury-black" : "text-gray-400 hover:text-luxury-black"
-                }`}
-              >
-                <List className="w-4 h-4" />
-                List
-              </button>
-              <button
-                onClick={() => setView("map")}
-                className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${
-                  view === "map" ? "bg-white shadow-md text-luxury-black" : "text-gray-400 hover:text-luxury-black"
-                }`}
-              >
-                <MapIcon className="w-4 h-4" />
-                Map
-              </button>
+                </SheetContent>
+              </Sheet>
+              
+              <div className="flex bg-white/5 p-1.5 rounded-[1.5rem] border border-white/10">
+                <button
+                  onClick={() => setView("grid")}
+                  className={`flex items-center gap-2 px-6 py-3 rounded-2xl text-[10px] font-bold uppercase tracking-widest transition-all ${
+                    view === "grid" ? "bg-gold text-black shadow-xl" : "text-white/40 hover:text-white"
+                  }`}
+                >
+                  <List className="w-4 h-4" />
+                  Gallery
+                </button>
+                <button
+                  onClick={() => setView("map")}
+                  className={`flex items-center gap-2 px-6 py-3 rounded-2xl text-[10px] font-bold uppercase tracking-widest transition-all ${
+                    view === "map" ? "bg-gold text-black shadow-xl" : "text-white/40 hover:text-white"
+                  }`}
+                >
+                  <MapIcon className="w-4 h-4" />
+                  Cartography
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="flex-1 overflow-hidden relative bg-gray-50/50">
-        <div className={`flex h-full transition-transform duration-500 ${view === "map" ? "-translate-x-full md:translate-x-0" : ""}`}>
-          <div className="w-full md:w-[60%] lg:w-[50%] h-full overflow-y-auto p-6 md:p-10">
-            <div className="mb-8">
-              <p className="text-gray-500 text-sm font-medium">
-                {loading ? "Searching..." : `Found ${properties.length} exclusive properties`}
+      {/* Main Content Area */}
+      <div className="flex-1 overflow-hidden relative">
+        <div className={`flex h-full transition-transform duration-700 ease-out-expo ${view === "map" ? "-translate-x-full md:translate-x-0" : ""}`}>
+          {/* Results Column */}
+          <div className="w-full md:w-[55%] lg:w-[45%] h-full overflow-y-auto custom-scrollbar p-6 lg:p-12">
+            <div className="mb-10 flex items-center justify-between">
+              <p className="text-white/30 text-[10px] font-bold uppercase tracking-[0.4em]">
+                {loading ? "Decrypting..." : `Showing ${properties.length} Private Listings`}
               </p>
             </div>
             
-            {loading ? (
-              <div className="flex items-center justify-center py-20">
-                <Loader2 className="w-10 h-10 text-gold animate-spin" />
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {properties.map((property) => (
-                  <motion.div
-                    key={property.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <PropertyCard property={property} />
-                  </motion.div>
-                ))}
-                {properties.length === 0 && (
-                  <div className="col-span-full text-center py-20">
-                    <h3 className="text-xl font-bold mb-2">No properties found</h3>
-                    <p className="text-gray-400">Try searching for a different location or adjusting filters.</p>
-                  </div>
-                )}
-              </div>
-            )}
+            <AnimatePresence mode="wait">
+              {loading ? (
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="flex flex-col items-center justify-center py-32 gap-6"
+                >
+                  <Loader2 className="w-12 h-12 text-gold animate-spin" />
+                  <span className="text-gold font-bold uppercase tracking-[0.4em] text-[10px]">Updating Portfolio...</span>
+                </motion.div>
+              ) : (
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="grid grid-cols-1 lg:grid-cols-2 gap-10 pb-20"
+                >
+                  {properties.map((property, index) => (
+                    <motion.div
+                      key={property.id}
+                      initial={{ opacity: 0, y: 30 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.8, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                    >
+                      <PropertyCard property={property} />
+                    </motion.div>
+                  ))}
+                  {properties.length === 0 && (
+                    <div className="col-span-full text-center py-32 border border-dashed border-white/10 rounded-[3rem]">
+                      <h3 className="editorial-heading text-3xl text-white mb-4">No Matches Found</h3>
+                      <p className="text-white/20 font-light">Your selection criteria returned zero results in our current portfolio.</p>
+                    </div>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
-          <div className="hidden md:block flex-1 h-full bg-gray-200 relative">
-            <div 
-              className="absolute inset-0 bg-[url('https://api.mapbox.com/maps/static/-118.4912,34.0195,10,0/1200x800?access_token=MOCK')] bg-cover bg-center"
-            >
-              <div className="absolute inset-0 flex items-center justify-center bg-black/5 backdrop-blur-[2px]">
-                <div className="bg-white/90 backdrop-blur-md px-6 py-3 rounded-full shadow-2xl border border-white/50">
-                  <p className="text-sm font-bold text-luxury-black flex items-center gap-2">
-                    <MapIcon className="w-4 h-4 text-gold" />
-                    Interactive Map Integration
-                  </p>
+          {/* Map / Visual Column */}
+          <div className="hidden md:block flex-1 h-full bg-luxury-dark relative overflow-hidden">
+            {/* Background Grid Pattern */}
+            <div className="absolute inset-0 opacity-10" style={{ backgroundImage: "radial-gradient(#C5A358 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
+            
+            <div className="absolute inset-0 flex items-center justify-center p-20">
+              <div className="w-full h-full glass rounded-[4rem] border-white/5 relative overflow-hidden">
+                {/* Fake Map Content */}
+                <div className="absolute inset-0 opacity-50 grayscale contrast-125 scale-110" style={{ backgroundImage: "url('https://api.mapbox.com/styles/v1/mapbox/dark-v11/static/-118.4912,34.0195,11,0/1200x800?access_token=MOCK')" }} />
+                
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="glass px-10 py-5 rounded-full border-white/20 shadow-2xl flex items-center gap-4 animate-pulse">
+                    <div className="w-3 h-3 bg-gold rounded-full" />
+                    <span className="text-white font-bold uppercase tracking-widest text-[10px]">Real-Time Market Visualization</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -192,8 +228,8 @@ const SearchContent = () => {
 const SearchPage = () => {
   return (
     <Suspense fallback={
-      <div className="flex h-screen items-center justify-center bg-white">
-        <Loader2 className="w-10 h-10 text-gold animate-spin" />
+      <div className="flex h-screen items-center justify-center bg-luxury-black">
+        <Loader2 className="w-12 h-12 text-gold animate-spin" />
       </div>
     }>
       <SearchContent />
@@ -202,3 +238,4 @@ const SearchPage = () => {
 };
 
 export default SearchPage;
+

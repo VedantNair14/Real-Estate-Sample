@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Search, MapPin, Home, DollarSign, ArrowDown } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Search, MapPin, Home, DollarSign, ArrowDown, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import Magnetic from "@/components/shared/Magnetic";
 
 const heroImages = [
   "https://images.unsplash.com/photo-1600585154340-be6199f7e009?q=80&w=2070&auto=format&fit=crop",
@@ -23,160 +24,185 @@ const Hero = () => {
     price: "$1M - $5M"
   });
 
-  const handleSearch = () => {
-    const query = new URLSearchParams({
-      location: searchParams.location,
-      type: searchParams.type,
-      price: searchParams.price
-    }).toString();
-    router.push(`/search?${query}`);
-  };
-
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImage((prev) => (prev + 1) % heroImages.length);
-    }, 5000);
+    }, 6000);
     return () => clearInterval(interval);
   }, []);
 
+  const handleSearch = () => {
+    const query = new URLSearchParams(searchParams).toString();
+    router.push(`/search?${query}`);
+  };
+
   return (
-    <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
-      {/* Rotating Background Images */}
-      {heroImages.map((src, i) => (
+    <section className="relative h-[100vh] w-full flex items-center justify-center overflow-hidden bg-black">
+      {/* Cinematic Background Images */}
+      <AnimatePresence mode="wait">
         <motion.div
-          key={i}
-          animate={{ opacity: currentImage === i ? 1 : 0, scale: currentImage === i ? 1 : 1.1 }}
-          transition={{ duration: 1.5, ease: "easeInOut" }}
+          key={currentImage}
+          initial={{ opacity: 0, scale: 1.1 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 1.05 }}
+          transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
           className="absolute inset-0"
         >
           <Image
-            src={src}
-            alt={`Hero ${i + 1}`}
+            src={heroImages[currentImage]}
+            alt="Luxury Estate"
             fill
-            className="object-cover"
-            priority={i === 0}
+            className="object-cover brightness-[0.6]"
+            priority
+            sizes="100vw"
           />
         </motion.div>
-      ))}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/60" />
+      </AnimatePresence>
 
-      {/* Side Indicators */}
-      <div className="absolute right-8 top-1/2 -translate-y-1/2 z-20 hidden md:flex flex-col gap-3">
+      {/* Overlays */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80" />
+      <div className="absolute inset-0 mesh-gradient opacity-40" />
+
+      {/* Content Container */}
+      <div className="container relative z-20 px-6 pt-20">
+        <div className="max-w-5xl mx-auto text-center">
+          {/* Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 mb-8 rounded-full glass border-white/10"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
+            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/80">
+              The Global Collection 2024
+            </span>
+          </motion.div>
+
+          {/* Heading */}
+          <div className="overflow-hidden mb-6">
+            <motion.h1
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+              className="editorial-heading text-6xl md:text-8xl lg:text-[7.5rem] text-white leading-[0.9] flex flex-col items-center"
+            >
+              <span>Exquisite</span>
+              <span className="italic text-gold">Masterpieces</span>
+            </motion.h1>
+          </div>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.8 }}
+            className="text-white/50 text-lg md:text-xl font-light tracking-wide max-w-2xl mx-auto mb-16"
+          >
+            Curating the world&apos;s most prestigious estates for those who settle for nothing less than extraordinary.
+          </motion.p>
+
+          {/* Luxury Search Bar */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 1, ease: [0.16, 1, 0.3, 1] }}
+            className="max-w-4xl mx-auto"
+          >
+            <div className="glass p-2 rounded-[2rem] flex flex-col md:flex-row items-stretch gap-2">
+              <div className="flex-1 grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10">
+                {/* Location */}
+                <div className="px-6 py-4 flex flex-col items-start group">
+                  <span className="text-[9px] uppercase font-bold text-gold tracking-widest mb-1">Destination</span>
+                  <div className="flex items-center w-full">
+                    <MapPin className="w-4 h-4 text-white/40 mr-2 group-hover:text-gold transition-colors" />
+                    <input 
+                      type="text" 
+                      placeholder="Monaco, Aspen..." 
+                      className="bg-transparent border-none focus:ring-0 text-white font-medium placeholder:text-white/20 p-0 text-[15px] outline-none w-full"
+                      value={searchParams.location}
+                      onChange={(e) => setSearchParams({ ...searchParams, location: e.target.value })}
+                    />
+                  </div>
+                </div>
+
+                {/* Type */}
+                <div className="px-6 py-4 flex flex-col items-start group">
+                  <span className="text-[9px] uppercase font-bold text-gold tracking-widest mb-1">Estate Type</span>
+                  <div className="flex items-center w-full relative">
+                    <Home className="w-4 h-4 text-white/40 mr-2 group-hover:text-gold transition-colors" />
+                    <select 
+                      className="bg-transparent border-none focus:ring-0 text-white font-medium p-0 text-[15px] outline-none appearance-none w-full cursor-pointer"
+                      value={searchParams.type}
+                      onChange={(e) => setSearchParams({ ...searchParams, type: e.target.value })}
+                    >
+                      <option className="bg-luxury-black">Penthouse</option>
+                      <option className="bg-luxury-black">Coastal Villa</option>
+                      <option className="bg-luxury-black">Private Island</option>
+                      <option className="bg-luxury-black">Historic Manor</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Price */}
+                <div className="px-6 py-4 flex flex-col items-start group">
+                  <span className="text-[9px] uppercase font-bold text-gold tracking-widest mb-1">Investment</span>
+                  <div className="flex items-center w-full relative">
+                    <DollarSign className="w-4 h-4 text-white/40 mr-2 group-hover:text-gold transition-colors" />
+                    <select 
+                      className="bg-transparent border-none focus:ring-0 text-white font-medium p-0 text-[15px] outline-none appearance-none w-full cursor-pointer"
+                      value={searchParams.price}
+                      onChange={(e) => setSearchParams({ ...searchParams, price: e.target.value })}
+                    >
+                      <option className="bg-luxury-black">$5M - $10M</option>
+                      <option className="bg-luxury-black">$10M - $50M</option>
+                      <option className="bg-luxury-black">$50M+</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <Magnetic>
+                <Button 
+                  onClick={handleSearch}
+                  className="bg-gold hover:bg-white text-black h-full px-10 rounded-[1.5rem] transition-all duration-500 font-bold tracking-tight group flex items-center gap-2"
+                >
+                  Discover
+                  <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Magnetic>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Floating Image Indicators */}
+      <div className="absolute right-12 bottom-12 z-30 hidden lg:flex flex-col gap-4">
         {heroImages.map((_, i) => (
           <button
             key={i}
             onClick={() => setCurrentImage(i)}
-            className={`w-[3px] rounded-full transition-all duration-500 ${
-              currentImage === i ? "h-10 bg-gold" : "h-4 bg-white/30"
-            }`}
-          />
+            className="group relative"
+          >
+            <div className={`w-1 transition-all duration-700 ${currentImage === i ? "h-12 bg-gold" : "h-6 bg-white/20 group-hover:bg-white/40"}`} />
+            <span className={`absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-bold transition-all duration-500 ${currentImage === i ? "opacity-100 text-gold" : "opacity-0 text-white"}`}>
+              0{i + 1}
+            </span>
+          </button>
         ))}
       </div>
 
-      {/* Content */}
-      <div className="container relative z-10 px-6 text-center text-white">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <span className="inline-block px-5 py-2 mb-8 text-[10px] font-bold tracking-[0.3em] uppercase border border-white/20 bg-white/5 backdrop-blur-md rounded-full">
-            The Pinnacle of Luxury Living
-          </span>
-          <h1 className="editorial-heading text-5xl md:text-7xl lg:text-[6.5rem] mb-6 leading-[0.95]">
-            Find Your <br />
-            <span className="italic text-gold">Dream Estate</span>
-          </h1>
-          <p className="text-white/60 text-lg max-w-lg mx-auto mb-12">
-            Discover the world&apos;s most prestigious properties, curated for extraordinary living.
-          </p>
-        </motion.div>
-
-        {/* Search Bar */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-4xl mx-auto"
-        >
-          <div className="bg-white/95 backdrop-blur-md p-2 md:p-3 rounded-2xl shadow-2xl flex flex-col md:flex-row items-center gap-2">
-            <div className="flex-1 w-full grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-200">
-              <div className="flex items-center px-5 py-3 md:py-0">
-                <MapPin className="w-5 h-5 text-gold mr-3 shrink-0" />
-                <div className="text-left">
-                  <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Location</p>
-                  <input 
-                    type="text" 
-                    placeholder="Where to?" 
-                    value={searchParams.location}
-                    onChange={(e) => setSearchParams({ ...searchParams, location: e.target.value })}
-                    className="w-full bg-transparent border-none focus:ring-0 text-luxury-black font-medium placeholder:text-gray-400 p-0 text-sm outline-none"
-                  />
-                </div>
-              </div>
-              
-              <div className="flex items-center px-5 py-3 md:py-0">
-                <Home className="w-5 h-5 text-gold mr-3 shrink-0" />
-                <div className="text-left">
-                  <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Property Type</p>
-                  <select 
-                    value={searchParams.type}
-                    onChange={(e) => setSearchParams({ ...searchParams, type: e.target.value })}
-                    className="w-full bg-transparent border-none focus:ring-0 text-luxury-black font-medium p-0 text-sm appearance-none outline-none"
-                  >
-                    <option>Penthouse</option>
-                    <option>Villa</option>
-                    <option>Mansion</option>
-                    <option>Modern</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="flex items-center px-5 py-3 md:py-0">
-                <DollarSign className="w-5 h-5 text-gold mr-3 shrink-0" />
-                <div className="text-left">
-                  <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Price Range</p>
-                  <select 
-                    value={searchParams.price}
-                    onChange={(e) => setSearchParams({ ...searchParams, price: e.target.value })}
-                    className="w-full bg-transparent border-none focus:ring-0 text-luxury-black font-medium p-0 text-sm appearance-none outline-none"
-                  >
-                    <option>$1M - $5M</option>
-                    <option>$5M - $10M</option>
-                    <option>$10M+</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            
-            <Button 
-              onClick={handleSearch}
-              className="w-full md:w-auto h-12 md:h-14 px-8 rounded-xl bg-luxury-black hover:bg-gold transition-all duration-300 group shrink-0"
-            >
-              <Search className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
-              <span className="font-semibold">Search</span>
-            </Button>
-          </div>
-        </motion.div>
-
-        {/* Scroll Indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5, duration: 1 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
-        >
-          <span className="text-[10px] uppercase tracking-[0.3em] font-medium text-white/40">Scroll to Discover</span>
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          >
-            <ArrowDown className="w-4 h-4 text-white/40" />
-          </motion.div>
-        </motion.div>
-      </div>
+      {/* Scroll Down */}
+      <motion.div
+        animate={{ y: [0, 10, 0] }}
+        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2"
+      >
+        <div className="w-[1px] h-12 bg-gradient-to-b from-transparent via-gold to-transparent" />
+        <span className="text-[8px] uppercase tracking-[0.4em] text-white/30 font-bold">Explore</span>
+      </motion.div>
     </section>
   );
 };
 
 export default Hero;
+
