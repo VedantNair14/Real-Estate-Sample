@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Navbar from "@/components/layout/Navbar";
 import PropertyCard from "@/components/shared/PropertyCard";
 import { motion } from "framer-motion";

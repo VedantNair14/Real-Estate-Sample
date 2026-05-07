@@ -101,12 +101,14 @@ const SearchContent = () => {
             
             <div className="flex items-center gap-6 pb-2">
               <Sheet>
-                <SheetTrigger asChild>
-                  <Button variant="outline" className="h-14 px-8 rounded-2xl gap-3 border-white/10 text-white hover:bg-white/5 font-bold uppercase tracking-widest text-[10px]">
-                    <SlidersHorizontal className="w-4 h-4" />
-                    Refine
-                  </Button>
-                </SheetTrigger>
+                <SheetTrigger
+                  render={
+                    <Button variant="outline" className="h-14 px-8 rounded-2xl gap-3 border-white/10 text-white hover:bg-white/5 font-bold uppercase tracking-widest text-[10px]">
+                      <SlidersHorizontal className="w-4 h-4" />
+                      Refine
+                    </Button>
+                  }
+                />
                 <SheetContent className="bg-luxury-dark border-white/5 text-white">
                   <SheetHeader>
                     <SheetTitle className="editorial-heading text-4xl text-white mb-10">Filters</SheetTitle>
